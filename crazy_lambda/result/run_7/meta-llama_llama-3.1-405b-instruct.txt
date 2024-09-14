@@ -1,0 +1,58 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+What a delightful puzzle!
+
+Let's break down each function:
+
+**A**: `A = x => u => v => u(x)`
+
+A is a higher-order function that takes three arguments: `x`, `u`, and `v`. It applies `u` to `x` and ignores `v`. In λ-Calculus, this is known as a "selector" or "projection" function, which selects the first argument (`x`) and applies a function (`u`) to it.
+
+**B**: `B = u => v => v`
+
+B is another higher-order function that takes two arguments: `u` and `v`. It ignores `u` and returns `v`. This is a "constant" function, which always returns its second argument.
+
+**C**: `C = x => x > 0? A(C(x-1)) : B`
+
+C is a recursive function that takes a single argument `x`. If `x` is greater than 0, it applies `A` to the result of `C(x-1)`. If `x` is 0 or less, it returns `B`. This function is building a nested structure of `A`s and `B`s, which will be important later.
+
+**D**: `D = x => x(y => 1+D(y))(0)`
+
+D is a recursive function that takes a single argument `x`. It applies `x` to a function that increments its argument by 1 and then applies `D` to the result. The `(0)` at the end is the initial value for the recursion. This function is essentially a "counter" that increments its argument by 1 until it reaches `x`.
+
+**E**: `E = a => a(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x)`
+
+E is a higher-order function that takes a single argument `a`. It applies `a` to a complex function that involves multiple nested applications of `E` itself. This function is a "fixed-point combinator," which is a way of implementing recursion without explicit function calls.
+
+**F**: `F = a => b => D(E(C(a))(C(b)))`
+
+F is the final function, which takes two arguments `a` and `b`. It applies `D` to the result of applying `E` to the results of applying `C` to `a` and `b`, respectively.
+
+Now, let's simplify F.
+
+Notice that `C(x)` builds a nested structure of `A`s and `B`s, where the number of `A`s is equal to `x`. When `x` is 0, `C(x)` returns `B`.
+
+`E` is a fixed-point combinator, which means it can be used to implement recursion. In this case, `E` is used to "unfold" the nested structure built by `C`.
+
+`D` is a counter that increments its argument by 1 until it reaches `x`.
+
+Putting it all together, we can see that `F(a, b)` is equivalent to `a + b`.
+
+Here's a simplified formula:
+
+`F(a, b) = a + b`
+
+In other words, the obfuscated function F is simply adding its two arguments together.
+
+Well, that was a fun puzzle!
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but incorrectly concluded F(a,b) = a + b, missing the λ-Nat structure and E's pattern-matching.
+- SC: 0
+
+SCORE: 0/1

@@ -1,0 +1,13 @@
+Let `F : Number -> Number -> Number` be the following JS fn (including dependencies):
+
+A = x => u => v => u(x);
+B = u => v => v;
+C = x => x > 0 ? A(C(x-1)) : B;
+D = x => x(y => 1+D(y))(0);
+E = a => a(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x);
+F = a => b => D(E(C(a))(C(b)));
+
+It has been obfuscated using λ-Calculus techniques. Without using a code interpreter.
+
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+#A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).

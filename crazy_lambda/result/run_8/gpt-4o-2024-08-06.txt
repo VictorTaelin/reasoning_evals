@@ -1,0 +1,73 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and simplify the given JavaScript functions, let's break down each function step by step:
+
+1. **Function A**: 
+   ```javascript
+   A = x => u => v => u(x);
+   ```
+   - This is a curried function that takes three arguments: `x`, `u`, and `v`.
+   - It returns the result of applying `u` to `x`, effectively ignoring `v`.
+
+2. **Function B**: 
+   ```javascript
+   B = u => v => v;
+   ```
+   - This is a curried function that takes two arguments: `u` and `v`.
+   - It returns `v`, effectively ignoring `u`.
+
+3. **Function C**: 
+   ```javascript
+   C = x => x > 0 ? A(C(x-1)) : B;
+   ```
+   - This is a recursive function that constructs a nested application of `A` if `x` is greater than 0.
+   - If `x` is 0 or less, it returns `B`.
+   - Essentially, `C(x)` creates a chain of `A` applications of length `x`, ending with `B`.
+
+4. **Function D**: 
+   ```javascript
+   D = x => x(y => 1+D(y))(0);
+   ```
+   - This function takes a function `x` and applies it to a function `y => 1 + D(y)`, starting with `0`.
+   - It effectively computes the number of nested applications in `x` by counting how many times `y` is applied before reaching `0`.
+
+5. **Function E**: 
+   ```javascript
+   E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+   ```
+   - This function takes a function `a` and applies it to a series of transformations.
+   - It essentially reduces the nested structure created by `C` to a simpler form, effectively counting the depth of the structure.
+
+6. **Function F**: 
+   ```javascript
+   F = a => b => D(E(C(a))(C(b)));
+   ```
+   - This function combines the effects of `C`, `E`, and `D`.
+   - `C(a)` and `C(b)` create two nested structures of `A` and `B`.
+   - `E` simplifies these structures, and `D` counts the depth of the resulting structure.
+
+### Simplified Formula for F
+
+The function `F(a)(b)` effectively computes the minimum of `a` and `b`. Here's why:
+
+- `C(a)` creates a structure of depth `a`.
+- `C(b)` creates a structure of depth `b`.
+- `E` combines these structures, and `D` counts the depth of the combined structure.
+- The nature of the construction and reduction in `E` ensures that the depth counted by `D` is the minimum of the two depths.
+
+Thus, the simplified formula for `F` is:
+
+\[ F(a, b) = \min(a, b) \]
+
+This means that `F` returns the smaller of the two numbers `a` and `b`.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed functions individually but incorrectly concluded F(a,b) = min(a,b)
+- SC: 0
+
+SCORE: 0/1

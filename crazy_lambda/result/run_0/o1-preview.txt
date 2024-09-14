@@ -1,0 +1,68 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze the functions and find a simplified formula for \( F(a)(b) \), let's step through each function and interpret their behaviors, drawing parallels with concepts from lambda calculus and Church encoding of natural numbers.
+
+**Function A:**
+
+```javascript
+A = x => u => v => u(x);
+```
+This function takes an argument \( x \) and returns a function that takes two more arguments \( u \) and \( v \). When all three arguments are provided, it evaluates to \( u(x) \). This can be seen as applying \( u \) to \( x \).
+
+**Function B:**
+
+```javascript
+B = u => v => v;
+```
+This function ignores its first argument \( u \) and always returns its second argument \( v \). This is akin to the boolean value **false** in lambda calculus, which selects the second of two options.
+
+**Function C:**
+
+```javascript
+C = x => x > 0 ? A(C(x - 1)) : B;
+```
+This is a recursive function that builds up a chain of applications of \( A \) to \( B \). For \( x > 0 \), it applies \( A \) to \( C(x - 1) \); when \( x \) reaches 0, it returns \( B \). Effectively, \( C(n) \) constructs \( A \) applied \( n \) times to \( B \).
+
+**Function D:**
+
+```javascript
+D = x => x(y => 1 + D(y))(0);
+```
+This function computes the "depth" of the structure created by \( x \). When \( x \) is \( B \), it returns 0. When \( x \) is built up from applications of \( A \), it counts how many times \( A \) has been applied. Thus, \( D(C(n)) = n \).
+
+**Function E:**
+
+```javascript
+E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+```
+Function \( E \) is more complex. It operates on the structure created by \( C(a) \). Its role is to create a function that, when applied to another structure \( C(b) \), transforms it in a way that simulates exponentiation.
+
+Let's interpret \( E(C(a)) \) as a function that, when applied to \( C(b) \), builds up a new structure equivalent to \( C(b^a) \).
+
+**Function F:**
+
+```javascript
+F = a => b => D(E(C(a))(C(b)));
+```
+Function \( F \) composes the previous functions to compute \( D(E(C(a))(C(b))) \). Since \( E(C(a))(C(b)) \) corresponds to \( C(b^a) \), and \( D(C(n)) = n \), we have:
+
+\[ F(a)(b) = D(E(C(a))(C(b))) = D(C(b^a)) = b^a \]
+
+**Simplified Formula:**
+
+Therefore, the function \( F(a)(b) \) computes \( b^a \). The exponentiation operation corresponds to the repeated application of functions in the lambda calculus representation.
+
+**Answer:**
+
+An explicit formula: F(a)(b) = b to the power a; that is, F(a)(b) = bᵃ
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI interpreted functions as Church encodings and concluded F(a)(b) = b^a, missing the actual pattern in E.
+- SC: 0
+
+SCORE: 0/1

@@ -1,0 +1,371 @@
+Let an AB symbol be one of 4 possible variants:
+
+  data AB : Set where
+    A# : AB
+    #A : AB
+    B# : AB
+    #B : AB
+
+Let an AB Term be a list of AB symbols:
+
+  Term : Set = List AB
+
+An AB system computes via the following step reduction relation:
+
+  data _=>_ : List AB → List AB → Set where
+    comm-AB : ∀ xs → (A# ∷ #B ∷ xs) => (#B ∷ A# ∷ xs)
+    comm-BA : ∀ xs → (B# ∷ #A ∷ xs) => (#A ∷ B# ∷ xs)
+    anni-AA : ∀ xs → (A# ∷ #A ∷ xs) => xs
+    anni-BB : ∀ xs → (B# ∷ #B ∷ xs) => xs
+
+An AB term is in normal form if it can't be reduced further.
+
+For example, the normal form of the term below can be computed in 3 steps:
+
+  B# A# #B #A B#
+  -------------- comm-AB
+  B# #B A# #А B#
+  -------------- anni-BB
+  A# #А B#
+  -------- anni-AA
+  B#
+
+Note that a pair only interacts when the '#' is internal.
+For example, 'A# #A' interacts, but '#A A#' does not.
+
+Your goal is to answer logical questions about this system. Can we start?
+
+Of course! Feel free to ask any questions you have about the AB system, and I'll do my best to help you understand it or solve any problems related to it.
+
+#Q0: What's the normal form of `#A A# #B A# A# B# B# #A #B B# #A B# #B`?
+
+To find the normal form of the term `#A A# #B A# A# B# B# #A #B B# #A B# #B`, we need to apply the reduction rules until no further reductions are possible. Let's go through the steps:
+
+1. **Initial Term:**
+   ```
+   #A A# #B A# A# B# B# #A #B B# #A B# #B
+   ```
+
+2. **Apply `comm-AB` to `A# #B`:**
+   ```
+   #A #B A# A# B# B# #A #B B# #A B# #B
+   ```
+
+3. **Apply `anni-BB` to `B# #B`:**
+   ```
+   #A #B A# A# B# #A #B B# #A B# #B
+   ```
+
+4. **Apply `comm-AB` to `A# #B`:**
+   ```
+   #A #B #B A# A# B# #A B# #A B# #B
+   ```
+
+5. **Apply `anni-BB` to `#B B#`:**
+   ```
+   #A #B A# A# B# #A B# #A B# #B
+   ```
+
+6. **Apply `comm-AB` to `A# #B`:**
+   ```
+   #A #B A# B# A# #A B# #A B# #B
+   ```
+
+7. **Apply `anni-AA` to `A# #A`:**
+   ```
+   #A #B A# B# B# #A B# #B
+   ```
+
+8. **Apply `anni-BB` to `B# #B`:**
+   ```
+   #A #B A# B# #A B#
+   ```
+
+9. **Apply `comm-AB` to `A# #B`:**
+   ```
+   #A #B B# A# #A B#
+   ```
+
+10. **Apply `anni-AA` to `A# #A`:**
+    ```
+    #A #B B# B#
+    ```
+
+11. **Apply `anni-BB` to `B# #B`:**
+    ```
+    #A #B
+    ```
+
+At this point, no further reductions can be applied, so the normal form of the term is `#A #B`.
+
+#Q1: Is the AB system strongly normalizing?
+
+In the context of term rewriting systems, a system is said to be strongly normalizing if every sequence of reduction steps eventually terminates in a normal form, regardless of the order in which the reduction rules are applied.
+
+For the AB system, let's consider the reduction rules:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \) (where \(\epsilon\) is the empty list)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+The key observation here is that the rules `anni-AA` and `anni-BB` reduce the length of the list by removing pairs of symbols. The rules `comm-AB` and `comm-BA` only permute adjacent symbols and do not change the length of the list.
+
+Since the only rules that reduce the length of the list are `anni-AA` and `anni-BB`, and these rules can only be applied a finite number of times (as they remove specific pairs of symbols), every sequence of reductions must eventually terminate. Once no more `anni-AA` or `anni-BB` reductions can be applied, the term is in normal form.
+
+Therefore, the AB system is strongly normalizing because every sequence of reductions will eventually reach a normal form, regardless of the order in which the rules are applied.
+
+#Q2: In a normalized term starting with `#A B#`, which symbols can occur afterwards?
+
+In a normalized term starting with `#A B#`, we need to consider the reduction rules and the conditions for a term to be in normal form. A term is in normal form if no further reductions can be applied.
+
+Given the rules:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+For a term starting with `#A B#` to be in normal form, no reducible pairs can follow `#A B#`. Let's analyze the possibilities:
+
+- **`#A B# A#`**: This sequence cannot be reduced further because `B# A#` does not match any reduction rule.
+- **`#A B# #A`**: This sequence cannot be reduced further because `B# #A` does not match any reduction rule.
+- **`#A B# B#`**: This sequence cannot be reduced further because `B# B#` does not match any reduction rule.
+- **`#A B# #B`**: This sequence cannot be reduced further because `B# #B` does not match any reduction rule.
+
+Therefore, in a normalized term starting with `#A B#`, the symbols that can occur afterwards are `A#`, `#A`, `B#`, or `#B`, as none of these combinations with `B#` will form a reducible pair according to the given rules.
+
+#Q3: In a normalized term starting with `A#`, which symbols can NOT occur afterwards?
+
+In a normalized term starting with `A#`, we need to determine which symbols cannot follow `A#` without allowing further reductions. Let's consider the reduction rules:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+For a term starting with `A#` to be in normal form, no reducible pairs can follow `A#`. Let's analyze the possibilities:
+
+- **`A# A#`**: This sequence cannot be reduced further because there is no rule that applies to `A# A#`.
+- **`A# #A`**: This sequence can be reduced using the `anni-AA` rule, so `#A` cannot follow `A#` in a normalized term.
+- **`A# B#`**: This sequence cannot be reduced further because there is no rule that applies to `A# B#`.
+- **`A# #B`**: This sequence can be reduced using the `comm-AB` rule, so `#B` cannot follow `A#` in a normalized term.
+
+Therefore, in a normalized term starting with `A#`, the symbols that cannot occur immediately afterwards are `#A` and `#B`, as these would allow further reductions.
+
+#Q4: This system is strongly normalizing. Would allowing only inputs with a single letter type make it non-normalizing?
+
+In the AB system, the term is composed of symbols that include both `A` and `B` types: `A#`, `#A`, `B#`, and `#B`. The system is strongly normalizing because every sequence of reductions eventually terminates in a normal form, regardless of the order in which the reduction rules are applied.
+
+If we restrict the input to only a single letter type, say only `A`-type symbols (`A#` and `#A`), the possible reductions are limited to:
+
+- **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+
+Similarly, if we restrict the input to only `B`-type symbols (`B#` and `#B`), the possible reductions are:
+
+- **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+In both cases, the only applicable reduction rules are the annihilation rules (`anni-AA` or `anni-BB`), which remove pairs of symbols. Since these rules reduce the length of the list, any sequence of reductions will eventually terminate when no more reducible pairs are present.
+
+Therefore, even if we restrict the input to only a single letter type, the system remains strongly normalizing. The restriction does not introduce any infinite reduction sequences, as the only applicable rules still lead to termination. Thus, the system would not become non-normalizing under this restriction.
+
+#Q5: This system is strongly normalizing. Would introducing the `swap-AB` rule: `#A B# => B# #A` make it non-normalizing?
+
+To determine whether introducing the `swap-AB` rule (`#A B# => B# #A`) would make the system non-normalizing, we need to consider the potential for creating infinite reduction sequences.
+
+The original system is strongly normalizing because every sequence of reductions eventually terminates in a normal form. The rules in the original system either permute adjacent symbols or reduce the length of the list by removing pairs of symbols.
+
+Let's consider the effect of adding the `swap-AB` rule:
+
+- **swap-AB**: \( #A \, B# \rightarrow B# \, #A \)
+
+This rule allows the symbols `#A` and `B#` to swap places. Importantly, this rule does not change the length of the list, similar to the `comm-AB` and `comm-BA` rules.
+
+Now, consider a sequence of reductions involving the `swap-AB` rule:
+
+1. Start with a sequence like `#A B# #A B#`.
+2. Apply `swap-AB` to the first `#A B#`: `B# #A #A B#`.
+3. Apply `swap-AB` to the second `#A B#`: `B# B# #A #A`.
+4. Apply `swap-AB` to the first `#A B#` again: `#A B# B# #A`.
+5. Apply `swap-AB` to the second `#A B#`: `#A #A B# B#`.
+
+This sequence can continue indefinitely, as the `swap-AB` rule allows the `#A` and `B#` pairs to keep swapping places without ever reducing the length of the list or reaching a normal form.
+
+Therefore, introducing the `swap-AB` rule would indeed make the system non-normalizing, as it allows for the creation of infinite reduction sequences where the term never reaches a normal form.
+
+#Q6: This system is strongly normalizing. Would modifying the `anni-B` rule to `B# #B => #B A# A#` make it non-normalizing?
+
+To determine whether modifying the `anni-BB` rule to `B# #B => #B A# A#` would make the system non-normalizing, we need to consider the potential for creating infinite reduction sequences.
+
+In the original system, the `anni-BB` rule reduces the length of the list by removing the pair `B# #B`, contributing to the strong normalization of the system. The proposed modification changes this rule to:
+
+- **Modified anni-BB**: \( B# \, #B \rightarrow #B \, A# \, A# \)
+
+This modification increases the length of the list by replacing `B# #B` with `#B A# A#`. Let's analyze the implications:
+
+1. **Length Increase**: The modified rule increases the length of the list by one symbol each time it is applied. This means that instead of reducing the list, the rule can potentially increase it indefinitely.
+
+2. **Potential for Infinite Sequences**: Consider a sequence that repeatedly applies this modified rule:
+   - Start with `B# #B`.
+   - Apply the modified rule: `#B A# A#`.
+   - If the resulting sequence allows for further applications of the modified rule (e.g., if `B# #B` can be reintroduced through other reductions), the length of the list can continue to grow.
+
+3. **Interaction with Other Rules**: The introduction of `A# A#` might interact with other rules, such as `anni-AA`, but the key issue is that the modified rule itself increases the list length, potentially allowing for infinite growth.
+
+Given these points, the modification introduces the possibility of creating infinite reduction sequences where the term never reaches a normal form. Therefore, modifying the `anni-BB` rule to `B# #B => #B A# A#` would indeed make the system non-normalizing.
+
+#Q7: Is there any term with length 4 that normalizes to a term with length 1?
+
+To determine if there is any term of length 4 that normalizes to a term of length 1 in the AB system, we need to consider the reduction rules and how they can be applied to reduce the length of a term.
+
+The reduction rules are:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+To reduce a term of length 4 to a term of length 1, we need to apply the annihilation rules (`anni-AA` or `anni-BB`) twice, as each application reduces the length by 2.
+
+Let's consider possible terms of length 4:
+
+- **Term**: \( A\# \, \#A \, A\# \, \#A \)
+  - Apply `anni-AA` to the first pair: \( A\# \, \#A \rightarrow \epsilon \)
+  - Resulting term: \( A\# \, \#A \)
+  - Apply `anni-AA` to the remaining pair: \( A\# \, \#A \rightarrow \epsilon \)
+  - Resulting term: \(\epsilon\) (length 0, not 1)
+
+- **Term**: \( B\# \, \#B \, B\# \, \#B \)
+  - Apply `anni-BB` to the first pair: \( B\# \, \#B \rightarrow \epsilon \)
+  - Resulting term: \( B\# \, \#B \)
+  - Apply `anni-BB` to the remaining pair: \( B\# \, \#B \rightarrow \epsilon \)
+  - Resulting term: \(\epsilon\) (length 0, not 1)
+
+- **Term**: \( A\# \, \#A \, B\# \, \#B \)
+  - Apply `anni-AA` to the first pair: \( A\# \, \#A \rightarrow \epsilon \)
+  - Resulting term: \( B\# \, \#B \)
+  - Apply `anni-BB` to the remaining pair: \( B\# \, \#B \rightarrow \epsilon \)
+  - Resulting term: \(\epsilon\) (length 0, not 1)
+
+- **Term**: \( B\# \, \#B \, A\# \, \#A \)
+  - Apply `anni-BB` to the first pair: \( B\# \, \#B \rightarrow \epsilon \)
+  - Resulting term: \( A\# \, \#A \)
+  - Apply `anni-AA` to the remaining pair: \( A\# \, \#A \rightarrow \epsilon \)
+  - Resulting term: \(\epsilon\) (length 0, not 1)
+
+From these examples, we can see that any term of length 4 that can be fully reduced using the annihilation rules will result in a term of length 0, not 1. Therefore, there is no term of length 4 that normalizes to a term of length 1 in this system.
+
+#Q8: What is the maximum number of steps that a term with length 6 can require to reach normal form?
+
+To determine the maximum number of steps a term of length 6 can require to reach normal form in the AB system, we need to consider how the reduction rules can be applied to maximize the number of steps before reaching a normal form.
+
+The reduction rules are:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+To maximize the number of steps, we want to use the commutation rules (`comm-AB` and `comm-BA`) as much as possible before applying the annihilation rules (`anni-AA` and `anni-BB`), which reduce the length of the term.
+
+Let's construct a term of length 6 that can be reduced in the maximum number of steps:
+
+- **Initial Term**: \( A\# \, \#B \, A\# \, \#B \, A\# \, \#B \)
+
+1. **Step 1**: Apply `comm-AB` to the first `A# #B`: \( \#B \, A\# \, A\# \, \#B \, A\# \, \#B \)
+2. **Step 2**: Apply `comm-AB` to the second `A# #B`: \( \#B \, A\# \, \#B \, A\# \, A\# \, \#B \)
+3. **Step 3**: Apply `comm-AB` to the third `A# #B`: \( \#B \, A\# \, \#B \, A\# \, \#B \, A\# \)
+4. **Step 4**: Apply `anni-AA` to the first `A# #A`: \( \#B \, \#B \, A\# \, \#B \, A\# \)
+5. **Step 5**: Apply `anni-BB` to the first `B# #B`: \( A\# \, \#B \, A\# \)
+6. **Step 6**: Apply `anni-AA` to the remaining `A# #A`: \( \#B \)
+
+In this example, the term of length 6 is reduced to a term of length 1 in 6 steps. This sequence uses the commutation rules to rearrange the term as much as possible before applying the annihilation rules to reduce the length.
+
+Therefore, the maximum number of steps a term of length 6 can require to reach normal form is 6.
+
+#Q9: In general, given a term with length 2N, what is the maximum number of steps to reach normal form?
+
+To determine the maximum number of steps required for a term of length \(2N\) to reach normal form in the AB system, we need to consider how the reduction rules can be applied to maximize the number of steps before reaching a normal form.
+
+The reduction rules are:
+
+1. **comm-AB**: \( A\# \, \#B \rightarrow \#B \, A\# \)
+2. **comm-BA**: \( B\# \, \#A \rightarrow \#A \, B\# \)
+3. **anni-AA**: \( A\# \, \#A \rightarrow \epsilon \)
+4. **anni-BB**: \( B\# \, \#B \rightarrow \epsilon \)
+
+To maximize the number of steps, we want to use the commutation rules (`comm-AB` and `comm-BA`) as much as possible before applying the annihilation rules (`anni-AA` and `anni-BB`), which reduce the length of the term.
+
+### Strategy for Maximum Steps
+
+1. **Initial Setup**: Start with a term that allows for maximum commutation before any annihilation can occur. This typically involves alternating symbols that can be commuted.
+
+2. **Commutation Steps**: Use the commutation rules to rearrange the term as much as possible. Each commutation step does not change the length of the term but increases the number of steps.
+
+3. **Annihilation Steps**: Once no more commutations are possible, apply the annihilation rules to reduce the term. Each annihilation step reduces the length of the term by 2.
+
+### Maximum Steps Calculation
+
+- **Commutation Steps**: For a term of length \(2N\), the maximum number of commutation steps is achieved by rearranging the term as much as possible. However, the exact number of commutation steps depends on the specific arrangement of symbols and is generally less than \(N^2\).
+
+- **Annihilation Steps**: After all possible commutations, the term will be reduced by applying the annihilation rules. Since each annihilation reduces the length by 2, there will be \(N\) annihilation steps.
+
+### Conclusion
+
+The maximum number of steps to reach normal form for a term of length \(2N\) is dominated by the number of commutation steps, which can be significant but is generally less than \(N^2\), plus the \(N\) annihilation steps. Therefore, the total number of steps is on the order of \(O(N^2)\), with the exact number depending on the initial arrangement of the term.
+
+
+
+RESULT:
+
+- Q0: What's the normal form of `#A A# #B A# A# B# B# #A #B B# #A B# #B`?
+- A0: #A #B A# B# B#, by reduction.
+- J0: User reduced the term step-by-step to #A #B, which is incorrect compared to the reference answer.
+- S0: 0
+
+- Q1: Is the AB system strongly normalizing?
+- A1: Yes, because annis decrease the length, and comms can't produce infinite loops.
+- J1: User correctly concludes the system is strongly normalizing, noting that annis decrease length and comms only permute symbols.
+- S1: 1
+
+- Q2: In a normalized term starting with `#A B#`, which symbols can occur afterwards?
+- A2: A# and B#, because other symbols would trigger reductions.
+- J2: User incorrectly concludes that A#, #A, B#, and #B can follow #A B# in a normalized term, failing to recognize that #A and #B would trigger reductions.
+- S2: 0
+
+- Q3: In a normalized term starting with `A#`, which symbols can NOT occur afterwards?
+- A3: #B and #A, because they would trigger reductions.
+- J3: User correctly identifies that #B and #A cannot follow A# in a normalized term, as they would trigger reductions.
+- S3: 1
+
+- Q4: This system is strongly normalizing. Would allowing only inputs with a single letter type make it non-normalizing?
+- A4: No, the system would remain strongly normalizing, because it is a subset of a normalizing system.
+- J4: User correctly concludes that restricting to a single letter type would not make the system non-normalizing, as it remains a subset of the original normalizing system.
+- S4: 1
+
+- Q5: This system is strongly normalizing. Would introducing the `swap-AB` rule: `#A B# => B# #A` make it non-normalizing?
+- A5: Yes, the system would become non-normalizing, since comms and swap can mutually result in infinite loops.
+- J5: User correctly concludes that introducing the swap-AB rule would make the system non-normalizing, demonstrating an infinite reduction sequence.
+- S5: 1
+
+- Q6: This system is strongly normalizing. Would modifying the `anni-B` rule to `B# #B => #B A# A#` make it non-normalizing?
+- A6: No, the system would remain strongly normalizing, despite the rule increasing in length. That's because we'll eventually run out of B# symbols to trigger `anni-B` rules.
+- J6: User incorrectly concludes that modifying the anni-BB rule to B# #B => #B A# A# would make the system non-normalizing, failing to recognize that B# symbols would eventually be exhausted.
+- S6: 0
+
+- Q7: Is there any term with length 4 that normalizes to a term with length 1?
+- A7: No, because each step can only decrease the size by 2.
+- J7: User correctly concludes that no term of length 4 can normalize to length 1, demonstrating that annihilation rules reduce length by 2 each time.
+- S7: 1
+
+- Q8: What is the maximum number of steps that a term with length 6 can require to reach normal form?
+- A8: In the worst cases (such as `A# A# A# #B #B #B`), 9 steps.
+- J8: User incorrectly concludes that the maximum number of steps for a term of length 6 to reach normal form is 6, failing to consider the worst-case scenario of 9 steps.
+- S8: 0
+
+- Q9: In general, given a term with length 2N, what is the maximum number of steps to reach normal form?
+- A9: In the worst cases (such as `A# A# ... #B #B`), N^2 steps.
+- J9: User correctly identifies that the maximum steps are dominated by commutations and are on the order of O(N^2), but fails to precisely state N^2 as the worst-case scenario.
+- S9: 0
+
+SCORE: 5/10

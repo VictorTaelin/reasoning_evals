@@ -1,0 +1,79 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and simplify the given functions, we'll interpret them in the context of lambda calculus and functional programming. Functions A and B are the building blocks, and they can be thought of as constructors for data structures, specifically representing natural numbers using Church numerals.
+
+### Function A:
+
+```javascript
+A = x => u => v => u(x);
+```
+
+**Explanation**: Function `A` takes an argument `x` and returns a function that takes two arguments `u` and `v`, applying `u` to `x`. In the context of Church numerals, this can be seen as constructing the successor of a numeral.
+
+### Function B:
+
+```javascript
+B = u => v => v;
+```
+
+**Explanation**: Function `B` ignores its first argument and returns its second argument. It represents the base case or zero in Church numerals.
+
+### Function C:
+
+```javascript
+C = x => x > 0 ? A(C(x - 1)) : B;
+```
+
+**Explanation**: Function `C` recursively builds up a representation of the number `x` using `A` and `B`. When `x` is greater than 0, it applies `A` to the result of `C(x - 1)`; when `x` is 0, it returns `B`. This effectively creates the Church numeral for `x`.
+
+### Function D:
+
+```javascript
+D = x => x(y => 1 + D(y))(0);
+```
+
+**Explanation**: Function `D` takes a Church numeral and converts it back to a JavaScript number. It applies the numeral `x` to a function that adds 1 to the result of `D(y)` and starts with 0. This effectively computes the numeric value of the Church numeral.
+
+### Function E:
+
+```javascript
+E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+```
+
+**Explanation**: Function `E` takes two Church numerals and implements exponentiation. It recursively applies exponentiation in the Church numeral representation.
+
+### Function F:
+
+```javascript
+F = a => b => D(E(C(a))(C(b)));
+```
+
+**Explanation**: Function `F` takes two numbers `a` and `b`, converts them to Church numerals using `C`, applies exponentiation using `E`, and then converts the result back to a JavaScript number using `D`. 
+
+### Simplified Formula:
+
+Given the interpretations above, the simplified formula equivalent to `F` is:
+
+**Simplified Formula**:
+
+\[ F(a)(b) = a^b \]
+
+### Conclusion:
+
+The function `F` computes \( a^b \) without using built-in exponentiation, by constructing and manipulating Church numerals through higher-order functions.
+
+**Answer:**
+An explicit formula: F(a)(b) equals a to the b power—that is, F(a)(b) = aᵇ
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: An explicit formula: F(a)(b) equals a to the b power—that is, F(a)(b) = aᵇ
+- J0: The AI interpreted F as exponentiation using Church numerals, concluding F(a)(b) = a^b
+- SC: 0
+
+SCORE: 0/1
+
+The AI's analysis was incorrect. It misinterpreted the functions, especially E, leading to an incorrect conclusion about F being exponentiation. The correct interpretation reveals that F(a,b) = b - floor(a/2), which is significantly different from the AI's a^b conclusion.

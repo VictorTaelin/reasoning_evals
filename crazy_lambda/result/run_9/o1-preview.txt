@@ -1,0 +1,86 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and simplify the given JavaScript functions, we'll delve into how they're constructed and what they represent, especially in the context of lambda calculus and Church numerals.
+
+**Function A:**
+
+```javascript
+A = x => u => v => u(x);
+```
+
+- **Interpretation:** `A` is a higher-order function that takes an argument `x` and returns a function that takes `u` and `v`, ultimately returning `u(x)`.
+- **In Lambda Calculus:** This resembles the successor function for Church numerals, which increments a numeral by one.
+
+**Function B:**
+
+```javascript
+B = u => v => v;
+```
+
+- **Interpretation:** `B` is a constant function that ignores its first argument `u` and returns its second argument `v`.
+- **In Lambda Calculus:** This corresponds to the Church numeral zero, which essentially returns the initial value without applying any function.
+
+**Function C:**
+
+```javascript
+C = x => x > 0 ? A(C(x - 1)) : B;
+```
+
+- **Interpretation:** `C` recursively constructs Church numerals. If `x > 0`, it applies the successor function `A` to `C(x - 1)`, otherwise, it returns `B`.
+- **In Lambda Calculus:** `C(n)` represents the Church numeral for the integer `n`, constructed by applying the successor function `n` times to zero.
+
+**Function D:**
+
+```javascript
+D = x => x(y => 1 + D(y))(0);
+```
+
+- **Interpretation:** `D` is an evaluator that computes the integer value of a given Church numeral.
+- **In Lambda Calculus:** This function applies the numeral to a function that increments a counter, effectively converting a Church numeral back to a JavaScript number.
+
+**Function E:**
+
+```javascript
+E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+```
+
+- **Interpretation:** `E` performs exponentiation on Church numerals.
+- **In Lambda Calculus:** This mirrors the exponentiation operation for Church numerals, where exponentiation is defined as `E(m)(n) = n m`.
+
+**Function F:**
+
+```javascript
+F = a => b => D(E(C(a))(C(b)));
+```
+
+- **Interpretation:** `F` computes the exponentiation of two natural numbers `a` and `b`. It first converts both numbers into Church numerals using `C`, then exponentiates them using `E`, and finally evaluates the result back to a JavaScript number using `D`.
+- **Simplified Formula:** `F(a, b) = a ** b` (where `**` denotes exponentiation).
+
+**Putting It All Together:**
+
+1. **Conversion to Church Numerals:** `C(a)` and `C(b)` convert JavaScript numbers `a` and `b` into their corresponding Church numerals.
+2. **Exponentiation:** `E(C(a))(C(b))` computes the exponentiation of the two Church numerals, effectively representing `a` raised to the power of `b` in Church numeral form.
+3. **Evaluation:** `D(...)` evaluates the resulting Church numeral back into a JavaScript number.
+
+**Final Simplified Formula:**
+
+```javascript
+F(a, b) = a ** b;
+```
+
+This means the function `F` calculates `a` raised to the power `b`.
+
+**Answer:**
+
+An explicit formula: **F(a, b) = a ᵇ** (that is, F computes the exponentiation of a and b)
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed functions as Church numerals and concluded F(a,b) = a^b, missing the actual pattern-matching structure.
+- SC: 0
+
+SCORE: 0/1

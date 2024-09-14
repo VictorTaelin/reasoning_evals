@@ -1,0 +1,66 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and simplify the given JavaScript functions, we'll closely examine each function and interpret them in terms of lambda calculus and Church numerals.
+
+**Function `A` and `B`**:
+```javascript
+A = x => u => v => u(x);
+B = u => v => v;
+```
+- `A` takes a value `x` and returns a function that applies `u` to `x`.
+- `B` ignores `u` and returns `v`.
+
+**Function `C`**:
+```javascript
+C = x => x > 0 ? A(C(x-1)) : B;
+```
+- `C` recursively builds a chain of applications of `A`, starting from `B` when `x` reaches `0`.
+- This effectively constructs the Church numeral representation of `x`, where:
+  - `C(0)` returns `B`.
+  - `C(n)` for `n > 0` returns `A(C(n-1))`.
+- Therefore, `C(n)` represents the Church numeral `n`, encoded as a function.
+
+**Function `D`**:
+```javascript
+D = x => x(y => 1+D(y))(0);
+```
+- `D` is a numeral decoder. It takes a Church numeral `x` and converts it to the corresponding integer.
+  - It applies the Church numeral to a function that increments the result, starting from `0`.
+  - For example:
+    - `D(C(0))` evaluates to `0`.
+    - `D(C(1))` evaluates to `1`.
+    - `D(C(2))` evaluates to `2`, and so on.
+
+**Function `E`**:
+```javascript
+E = a => a(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x);
+```
+- `E` is designed to perform exponentiation on Church numerals.
+- It takes a Church numeral `a` and returns a function that, when applied to a Church numeral `b`, computes `a` raised to the power of `b`.
+  - It does this by applying `a` times a function that composes functions `b` times.
+
+**Function `F`**:
+```javascript
+F = a => b => D(E(C(a))(C(b)));
+```
+- `F` takes two numbers `a` and `b`, converts them to Church numerals using `C(a)` and `C(b)`.
+- It then applies `E` to perform exponentiation: `E(C(a))(C(b))` computes the Church numeral of `a^b`.
+- Finally, it decodes the result back to an integer using `D`.
+
+**Simplified Formula**:
+The function `F` computes the exponentiation of `a` raised to the power `b`:
+
+\[
+F(a, b) = a^b
+\]
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI interpreted functions as Church numerals and exponentiation, concluding F(a,b) = a^b.
+- SC: 0
+
+SCORE: 0/1

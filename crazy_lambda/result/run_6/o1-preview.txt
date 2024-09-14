@@ -1,0 +1,99 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze the given JavaScript functions and simplify \( F \), we'll consider each function step by step and interpret them in the context of lambda calculus and Church numerals.
+
+**Function A:**
+
+```javascript
+A = x => u => v => u(x);
+```
+
+This function takes an argument \( x \) and returns a function that takes \( u \) and \( v \), ultimately returning \( u(x) \).
+
+In lambda calculus notation:
+\[ A = \lambda x. \lambda u. \lambda v. \ u(x) \]
+
+**Function B:**
+
+```javascript
+B = u => v => v;
+```
+
+This function ignores \( u \) and returns \( v \). 
+
+In lambda calculus:
+\[ B = \lambda u. \lambda v. \ v \]
+
+**Function C:**
+
+```javascript
+C = x => x > 0 ? A(C(x-1)) : B;
+```
+
+This function recursively builds a chain of \( A \)'s applied to \( B \) based on the integer \( x \).
+
+- For \( x = 0 \):
+  \[ C(0) = B \]
+- For \( x > 0 \):
+  \[ C(n) = A(C(n-1)) \]
+
+By unfolding, \( C(n) \) becomes a Church numeral representing \( n \):
+\[ C(n)(u)(v) = u^n(v) \]
+
+**Function D:**
+
+```javascript
+D = x => x(y => 1 + D(y))(0);
+```
+
+This function evaluates a Church numeral into its integer value.
+
+- It applies \( x \) (a Church numeral) to the function \( y \mapsto 1 + D(y) \), starting from \( 0 \).
+- For a Church numeral \( C(n) \):
+  \[ D(C(n)) = n \]
+
+**Function E:**
+
+```javascript
+E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+```
+
+This function seems complex, but when we analyze it, we find:
+
+- \( E(C(n))(x) = x \) for any \( n \).
+- Essentially, \( E \) processes its argument but ultimately acts like an identity function for the provided Church numeral.
+
+**Function F:**
+
+```javascript
+F = a => b => D(E(C(a))(C(b)));
+```
+
+Given our understanding of \( D \), \( E \), and \( C \):
+
+- \( E(C(a))(C(b)) = C(b) \)
+- Therefore:
+  \[ F(a)(b) = D(C(b)) = b \]
+
+**Simplified Formula:**
+
+The function \( F \) simply returns its second argument \( b \), regardless of \( a \):
+
+\[ F(a)(b) = b \]
+
+Thus, after deobfuscating, \( F \) is equivalent to the identity function on its second argument.
+
+**Answer:**
+
+An explicit formula:  **F(a)(b) = b** —that is, F always returns its second argument b
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but misinterpreted E's behavior, leading to an incorrect simplification of F.
+- SC: 0
+
+SCORE: 0/1

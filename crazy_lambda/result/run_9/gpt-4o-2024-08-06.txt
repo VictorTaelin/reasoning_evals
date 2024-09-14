@@ -1,0 +1,64 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and explain each function, let's break down the code step by step:
+
+1. **Function A**: 
+   ```javascript
+   A = x => u => v => u(x);
+   ```
+   - This function takes an argument `x` and returns a function that takes an argument `u`, which in turn returns a function that takes an argument `v`. The innermost function applies `u` to `x`. Essentially, `A` is a curried function that applies its first argument to the second.
+
+2. **Function B**:
+   ```javascript
+   B = u => v => v;
+   ```
+   - This function takes an argument `u` and returns a function that takes an argument `v`, which simply returns `v`. This is a constant function that ignores its first argument and returns the second.
+
+3. **Function C**:
+   ```javascript
+   C = x => x > 0 ? A(C(x-1)) : B;
+   ```
+   - This is a recursive function that decrements `x` until it reaches 0. If `x` is greater than 0, it returns `A(C(x-1))`, otherwise it returns `B`. This constructs a nested application of `A` functions, effectively creating a chain of functions that apply their arguments in sequence.
+
+4. **Function D**:
+   ```javascript
+   D = x => x(y => 1+D(y))(0);
+   ```
+   - This function takes a function `x` and applies it to a function `y => 1 + D(y)`, then applies the result to `0`. This is a way to evaluate the function `x` by applying it to a successor function, effectively counting the number of applications.
+
+5. **Function E**:
+   ```javascript
+   E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+   ```
+   - This function takes a function `a` and applies it to a function that applies its argument `b` to another function. This is a complex recursive function that essentially reduces the nested structure created by `C`.
+
+6. **Function F**:
+   ```javascript
+   F = a => b => D(E(C(a))(C(b)));
+   ```
+   - This function takes two arguments `a` and `b`, applies `C` to both, then applies `E` to the result of `C(a)` and `C(b)`, and finally applies `D` to the result. This is a composition of the previous functions.
+
+### Simplified Explanation and Formula
+
+The functions `A`, `B`, `C`, `D`, and `E` are constructing and evaluating Church numerals, which are a way to represent natural numbers in lambda calculus. Here's how they work together:
+
+- **C(x)**: Constructs a Church numeral for the number `x`.
+- **E**: Evaluates the Church numeral by reducing it to a simpler form.
+- **D**: Converts the Church numeral back to a JavaScript number by counting the number of applications.
+
+Therefore, the function `F(a)(b)` computes the product of two numbers `a` and `b` using Church numerals. The simplified formula equivalent to `F` is:
+
+\[ F(a, b) = a \times b \]
+
+This is because the combination of `C`, `E`, and `D` effectively multiplies the two numbers represented by Church numerals.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI explained functions as Church numerals and concluded F(a,b) = a × b, missing the actual pattern-matching structure.
+- SC: 0
+
+SCORE: 0/1

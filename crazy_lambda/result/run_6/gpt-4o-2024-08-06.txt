@@ -1,0 +1,78 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and explain each function, let's break down the code step by step:
+
+1. **Function A**: 
+   ```javascript
+   A = x => u => v => u(x);
+   ```
+   - This function takes three arguments: `x`, `u`, and `v`.
+   - It returns the result of applying the function `u` to `x`.
+   - Essentially, it ignores `v` and applies `u` to `x`.
+
+2. **Function B**:
+   ```javascript
+   B = u => v => v;
+   ```
+   - This function takes two arguments: `u` and `v`.
+   - It returns `v`, effectively ignoring `u`.
+
+3. **Function C**:
+   ```javascript
+   C = x => x > 0 ? A(C(x-1)) : B;
+   ```
+   - This is a recursive function that takes a number `x`.
+   - If `x` is greater than 0, it returns `A(C(x-1))`, which is a function that applies `C(x-1)` to its first argument.
+   - If `x` is 0 or less, it returns `B`.
+   - This function constructs a chain of applications based on the value of `x`.
+
+4. **Function D**:
+   ```javascript
+   D = x => x(y => 1+D(y))(0);
+   ```
+   - This function takes a function `x` as an argument.
+   - It applies `x` to a function `y => 1 + D(y)` and then applies the result to `0`.
+   - This effectively counts the number of times `x` can be applied to its argument before reaching a base case.
+
+5. **Function E**:
+   ```javascript
+   E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+   ```
+   - This function takes a function `a` as an argument.
+   - It applies `a` to a function that applies its argument `b` to another function.
+   - This inner function applies `c` to a function that applies `x` to another function.
+   - The structure of `E` suggests it is a form of fixed-point combinator, which is used to achieve recursion.
+
+6. **Function F**:
+   ```javascript
+   F = a => b => D(E(C(a))(C(b)));
+   ```
+   - This function takes two numbers `a` and `b`.
+   - It applies `C(a)` and `C(b)` to `E`, and then applies the result to `D`.
+   - The function `F` essentially counts the number of applications of `C(a)` and `C(b)`.
+
+### Simplified Formula for F
+
+The function `F` is essentially computing the sum of two numbers `a` and `b`. Here's why:
+
+- `C(a)` creates a chain of `a` applications of `A` followed by `B`.
+- `C(b)` creates a chain of `b` applications of `A` followed by `B`.
+- `E` is used to combine these chains into a single function that represents the sum of the two chains.
+- `D` counts the number of applications in this combined chain, which is `a + b`.
+
+Therefore, the simplified formula equivalent to `F` is:
+
+\[ F(a, b) = a + b \]
+
+This function `F` effectively computes the sum of the two input numbers `a` and `b`.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: The AI analyzed each function but incorrectly concluded F(a,b) = a + b, missing the λ-Nat structure and E's pattern-matching.
+- SC: 0
+
+SCORE: 0/1

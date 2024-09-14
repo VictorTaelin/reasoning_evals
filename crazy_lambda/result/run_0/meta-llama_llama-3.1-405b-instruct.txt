@@ -1,0 +1,62 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+What a delightful puzzle!
+
+Let's break down each function:
+
+**A**: `A = x => u => v => u(x)`
+
+A is a higher-order function that takes three arguments: `x`, `u`, and `v`. It applies `u` to `x` and ignores `v`. In λ-Calculus, this is known as a "selector" or "projection" function, which selects the first argument (`x`) and applies a function (`u`) to it.
+
+**B**: `B = u => v => v`
+
+B is another higher-order function that takes two arguments: `u` and `v`. It ignores `u` and returns `v`. This is a "constant" function, which always returns its second argument.
+
+**C**: `C = x => x > 0? A(C(x-1)) : B`
+
+C is a recursive function that takes a single argument `x`. If `x` is greater than 0, it applies `A` to the result of `C(x-1)`. If `x` is 0 or less, it returns `B`. This function is building a nested structure of `A`s and `B`s, where each `A` is applied to the result of the previous `C` call.
+
+**D**: `D = x => x(y => 1+D(y))(0)`
+
+D is a recursive function that takes a single argument `x`. It applies `x` to a function that increments its argument by 1 and then applies `D` to the result. The `(0)` at the end is the initial value for the recursion. This function is essentially a "counter" that increments its argument by 1 at each recursive step.
+
+**E**: `E = a => a(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x)`
+
+E is a higher-order function that takes a single argument `a`. It applies `a` to a complex function that involves multiple nested function applications. This function is difficult to decipher, but we'll come back to it later.
+
+**F**: `F = a => b => D(E(C(a))(C(b)))`
+
+F is the main function that takes two arguments: `a` and `b`. It applies `D` to the result of `E` applied to the results of `C(a)` and `C(b)`.
+
+Now, let's simplify the formula for F.
+
+Notice that `C(x)` is building a nested structure of `A`s and `B`s. When `x` is 0 or less, `C(x)` returns `B`, which is a constant function that ignores its first argument. Therefore, `C(a)` and `C(b)` will eventually return `B` when `a` and `b` are 0 or less.
+
+When `C(a)` and `C(b)` return `B`, the `E` function will simplify to:
+
+`E(B) = B(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x)`
+
+Since `B` ignores its first argument, the inner functions will be ignored, and `E(B)` will return `x=>x`, which is the identity function.
+
+Now, let's look at `D(E(C(a))(C(b)))`. When `C(a)` and `C(b)` return `B`, `E` will return the identity function, and `D` will simplify to:
+
+`D(x=>x) = x=>x(y => 1+D(y))(0)`
+
+This is equivalent to the `D` function itself, which increments its argument by 1 at each recursive step.
+
+Therefore, the simplified formula for F is:
+
+`F(a, b) = D(x=>x) = a + b`
+
+So, the obfuscated function F is simply adding its two arguments, `a` and `b`.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but failed to recognize A/B as λ-Nat constructors and incorrectly simplified F to a + b.
+- SC: 0
+
+SCORE: 0/1

@@ -1,0 +1,71 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and explain each function, let's break down the code step by step:
+
+1. **Function A**: 
+   ```javascript
+   A = x => u => v => u(x);
+   ```
+   - This function takes three arguments: `x`, `u`, and `v`.
+   - It returns the result of applying the function `u` to `x`.
+   - Essentially, it ignores `v` and applies `u` to `x`.
+
+2. **Function B**:
+   ```javascript
+   B = u => v => v;
+   ```
+   - This function takes two arguments: `u` and `v`.
+   - It returns `v`, effectively ignoring `u`.
+
+3. **Function C**:
+   ```javascript
+   C = x => x > 0 ? A(C(x-1)) : B;
+   ```
+   - This is a recursive function that takes a number `x`.
+   - If `x` is greater than 0, it returns `A(C(x-1))`.
+   - If `x` is 0 or less, it returns `B`.
+   - This function constructs a nested application of `A` functions, with `B` as the base case.
+
+4. **Function D**:
+   ```javascript
+   D = x => x(y => 1+D(y))(0);
+   ```
+   - This function takes a function `x` and applies it to a function `y => 1 + D(y)`, then applies the result to `0`.
+   - It effectively computes the number of times `x` can be applied to the function `y => 1 + D(y)` starting from `0`.
+   - This is a way to count the number of applications, similar to evaluating a Church numeral.
+
+5. **Function E**:
+   ```javascript
+   E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+   ```
+   - This function takes a function `a` and applies it to a complex function.
+   - The inner function `b => b(c => x => x(y => E(c)(y))(x))(x => x)` is a fixed-point combinator pattern.
+   - It essentially reduces `a` to its normal form, evaluating it as a Church numeral.
+
+6. **Function F**:
+   ```javascript
+   F = a => b => D(E(C(a))(C(b)));
+   ```
+   - This function takes two numbers `a` and `b`.
+   - It constructs Church numerals for `a` and `b` using `C`.
+   - It applies `E` to these Church numerals, effectively reducing them to their normal forms.
+   - Finally, it uses `D` to count the number of applications, which results in the multiplication of `a` and `b`.
+
+**Simplified Formula for F:**
+
+The function `F` is equivalent to the multiplication of two numbers `a` and `b`. Therefore, the simplified formula for `F` is:
+
+\[ F(a, b) = a \times b \]
+
+This is because the function constructs Church numerals for `a` and `b`, applies a fixed-point combinator to evaluate them, and then counts the applications, which corresponds to multiplication.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but incorrectly concluded F(a,b) = a × b, missing the pattern-matching structure in E.
+- SC: 0
+
+SCORE: 0/1

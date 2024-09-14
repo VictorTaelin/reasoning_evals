@@ -1,0 +1,51 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+Let's analyze each function and then simplify F:
+
+A(x)(u)(v) = u(x)
+A takes three arguments and returns the result of applying the second argument to the first.
+
+B(u)(v) = v
+B takes two arguments and returns the second one.
+
+C(x) = if x > 0 then A(C(x-1)) else B
+C is a recursive function. If x > 0, it calls itself with x-1 and wraps the result in A. If x ≤ 0, it returns B.
+
+D(x) = x(y → 1 + D(y))(0)
+D is also recursive. It applies x to a function that adds 1 to the recursive call of D, and to 0.
+
+E(a) = a(b → b(c → x → x(y → E(c)(y))(x))(x → x))(x → x)
+E is a complex recursive function that applies its argument in a nested manner.
+
+F(a)(b) = D(E(C(a))(C(b)))
+F applies C to both its arguments, then applies E to the results, and finally applies D to that result.
+
+Analyzing the behavior:
+
+1. C(x) effectively creates a chain of A functions of length x when x > 0, or B when x ≤ 0.
+2. E seems to combine its two arguments in a way that results in nested function applications.
+3. D counts the depth of the function produced by E(C(a))(C(b)).
+
+After careful analysis, it appears that F(a)(b) is equivalent to:
+
+F(a, b) = max(a, b)
+
+This is because:
+- C(a) and C(b) create chains of length a and b respectively.
+- E combines these chains in a way that preserves the longer one.
+- D then counts the depth of this combined structure, which is equal to the maximum of a and b.
+
+Therefore, the simplified formula equivalent to F is:
+
+F(a, b) = max(a, b)
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed functions and concluded F(a,b) = max(a,b) based on function composition and recursion.
+- SC: 0
+
+SCORE: 0/1

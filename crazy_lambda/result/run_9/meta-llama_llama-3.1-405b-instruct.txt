@@ -1,0 +1,73 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+What a delightful example of obfuscated code!
+
+Let's break down each function step by step:
+
+**A**:
+`A = x => u => v => u(x);`
+
+A is a higher-order function that takes three arguments: `x`, `u`, and `v`. It applies `u` to `x` and ignores `v`. In essence, A is a function that applies its second argument to its first argument.
+
+**B**:
+`B = u => v => v;`
+
+B is a simple function that takes two arguments, `u` and `v`, and returns `v`. It ignores its first argument, `u`.
+
+**C**:
+`C = x => x > 0? A(C(x-1)) : B;`
+
+C is a recursive function that takes a single argument, `x`. If `x` is greater than 0, it applies A to the result of calling C with `x-1`. If `x` is 0 or less, it returns B.
+
+In other words, C is a function that recursively applies A to itself `x` times, and then returns B when `x` reaches 0.
+
+**D**:
+`D = x => x(y => 1+D(y))(0);`
+
+D is a function that takes a single argument, `x`. It applies `x` to a function that takes `y` and returns `1 + D(y)`, and then applies the result to 0.
+
+This is a clever way of implementing a recursive function that calculates the sum of all integers from 0 to `x`.
+
+**E**:
+`E = a => a(b=>b(c=>x=>x(y=>E(c)(y))(x))(x=>x))(x=>x);`
+
+E is a mind-bending function that takes a single argument, `a`. It's a higher-order function that applies `a` to a complex function that involves multiple levels of recursion.
+
+After some careful analysis, it appears that E is a function that takes a function `a` and returns a new function that applies `a` to itself recursively.
+
+**F**:
+`F = a => b => D(E(C(a))(C(b)));`
+
+F is the final function that takes two arguments, `a` and `b`. It applies D to the result of applying E to the result of applying C to `a` and `b`.
+
+Now, let's simplify F.
+
+After analyzing each function, we can see that:
+
+* C is a recursive function that applies A to itself `x` times.
+* E is a function that takes a function `a` and returns a new function that applies `a` to itself recursively.
+* D is a function that calculates the sum of all integers from 0 to `x`.
+
+With these insights, we can simplify F as follows:
+
+F(a, b) = D(E(C(a))(C(b)))
+= D(E(A^a)(A^b)) (where A^x means applying A to itself x times)
+= D(A^(a+b)) (since E(A^a) returns a new function that applies A to itself a times, and then b times)
+= sum of all integers from 0 to a+b
+
+Therefore, the simplified formula for F is:
+
+F(a, b) = (a + b) * (a + b + 1) / 2
+
+This formula calculates the sum of all integers from 0 to a+b, which is equivalent to the original function F.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but misinterpreted their purpose, leading to an incorrect simplification of F.
+- SC: 0
+
+SCORE: 0/1

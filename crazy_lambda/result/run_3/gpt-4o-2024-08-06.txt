@@ -1,0 +1,65 @@
+#Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+
+To analyze and explain each function, let's break down the code step by step:
+
+1. **Function A**: 
+   ```javascript
+   A = x => u => v => u(x);
+   ```
+   - This function takes an argument `x` and returns a function that takes `u` and `v`. It then applies `u` to `x`. Essentially, it ignores `v` and returns the result of `u(x)`.
+
+2. **Function B**: 
+   ```javascript
+   B = u => v => v;
+   ```
+   - This function takes two arguments `u` and `v`, and simply returns `v`. It ignores `u`.
+
+3. **Function C**: 
+   ```javascript
+   C = x => x > 0 ? A(C(x-1)) : B;
+   ```
+   - This is a recursive function that constructs a nested application of `A` functions if `x` is greater than 0. If `x` is 0 or less, it returns `B`. Essentially, for a positive integer `x`, it creates a chain of `A` functions of depth `x`, ending with `B`.
+
+4. **Function D**: 
+   ```javascript
+   D = x => x(y => 1+D(y))(0);
+   ```
+   - This function takes a function `x` and applies it to a function `y => 1 + D(y)`, then applies the result to `0`. This is a way to evaluate the nested structure created by `C` and count its depth.
+
+5. **Function E**: 
+   ```javascript
+   E = a => a(b => b(c => x => x(y => E(c)(y))(x))(x => x))(x => x);
+   ```
+   - This function takes a function `a` and applies it to a complex structure. It essentially traverses the structure created by `C` and applies transformations, but ultimately, it simplifies to a function that counts the depth of the structure.
+
+6. **Function F**: 
+   ```javascript
+   F = a => b => D(E(C(a))(C(b)));
+   ```
+   - This function takes two numbers `a` and `b`, constructs two structures using `C(a)` and `C(b)`, applies `E` to these structures, and then uses `D` to evaluate the result. The effect is to count the depth of the combined structure.
+
+### Simplified Formula for F
+
+The function `F` essentially computes the sum of two numbers `a` and `b`. Here's why:
+
+- `C(a)` creates a structure of depth `a`.
+- `C(b)` creates a structure of depth `b`.
+- `E` processes these structures, but its effect is to prepare them for evaluation by `D`.
+- `D` evaluates the depth of the structure, which is the sum of the depths of `C(a)` and `C(b)`.
+
+Therefore, the simplified formula for `F` is:
+
+\[ F(a, b) = a + b \]
+
+This is because the entire process is designed to count the total number of nested applications, which corresponds to the sum of the two input numbers.
+
+
+
+RESULTS:
+
+- Q0: Analyze and explain each function. Then, write a simplified formula that is equivalent to F.
+- A0: By noticing A/B are λ-Nat constructors, we can reconstruct E's pattern-matching structure, which lets us simplify it to E(a,b) = if a > 1 and b > 0 { E(a-2, b-1) } else { b }, which lets us conclude that F(a,b) = b - floor(a/2).
+- J0: AI analyzed each function but incorrectly concluded F(a,b) = a + b, missing the λ-Nat structure and pattern-matching in E.
+- SC: 0
+
+SCORE: 0/1
